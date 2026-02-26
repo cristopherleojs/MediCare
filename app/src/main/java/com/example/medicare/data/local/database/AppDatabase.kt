@@ -15,6 +15,11 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun usuarioDao(): UsuarioDao
     abstract fun enfermedadDao(): EnfermedadDao
 
+    // nuevos Daos o tablas
+    abstract fun medicamentoDao(): MedicamentoDao
+    abstract fun programacionDao(): ProgramacionDao
+    abstract fun historialTomaDao(): HistorialTomaDao
+
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
