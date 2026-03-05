@@ -15,8 +15,7 @@ import androidx.room.Index
             childColumns = ["id_usuario_fk"],
             onDelete = ForeignKey.CASCADE
         )
-    ],
-    indices = [Index(value = ["id_usuario_fk"])]
+    ]
 )
 data class Enfermedad(
     @PrimaryKey(autoGenerate = true)

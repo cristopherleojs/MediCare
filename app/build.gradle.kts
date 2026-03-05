@@ -45,7 +45,20 @@ android {
 
 dependencies {
 
-    // --- LIBRERÍAS PARA ROOM Y ARQUITECTURA ---
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
+    // Retrofit - Cliente HTTP para conectar con tu API en Node.js
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+// Converter Gson - Para traducir el JSON de tu servidor a Data Classes en Kotlin
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+// Coroutines - Para operaciones asíncronas sin trabar la pantalla
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+
+    // LIBRERIAS PARA ROOM Y ARQUITECTURA
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
 // Soporte para Corrutinas en Room
@@ -54,6 +67,8 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
 
     val lifecycle_version = "2.7.0"
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 // ViewModel y LiveData
 
     implementation("androidx.compose.material:material-icons-extended:1.6.0")

@@ -7,7 +7,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Index
 
 @Entity(
-    tableName = "programacion_horarios",
+    tableName = "programacion_horarios", // <--- Le regresamos su nombre original
     foreignKeys = [
         ForeignKey(
             entity = Medicamento::class,
@@ -15,8 +15,7 @@ import androidx.room.Index
             childColumns = ["id_medicamento_fk"],
             onDelete = ForeignKey.CASCADE
         )
-    ],
-    indices = [Index(value = ["id_medicamento_fk"])]
+    ]
 )
 data class Programacion(
     @PrimaryKey(autoGenerate = true)

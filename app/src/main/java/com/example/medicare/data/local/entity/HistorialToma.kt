@@ -11,7 +11,7 @@ import androidx.room.ColumnInfo
         ForeignKey(
             entity = Programacion::class,
             parentColumns = ["idProgramacion"],
-            childColumns = ["idProgramacionFk"],
+            childColumns = ["id_programacion_fk"],
             onDelete = ForeignKey.CASCADE
         )
     ]

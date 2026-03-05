@@ -1,5 +1,6 @@
 package com.example.medicare.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,21 +25,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicare.R
+import com.example.medicare.ui.enfermedades.EnfermedadesActivity
 import com.example.medicare.ui.theme.MediCareTheme
 
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // nombre del usuario desde el Login o Registro
-        val nombreRecibido = intent.getStringExtra("NOMBRE_USUARIO") ?: "Usuario"
+
+        // Nombre del usuario desde el Login o Registro
+        val nombreRecibido = intent.getStringExtra("NOMBRE_USUARIO") ?: "Usuario Nube"
 
         setContent {
             MediCareTheme {
                 HomeScreen(
                     nombreUsuario = nombreRecibido,
-                    onIrAEnfermedades = { }, // vista de enfermedades(no esta )
-                    onIrAMedicamentos = { }  //vista de medicamentos(no esta)
+                    onIrAEnfermedades = {
+                        // CONEXIÓN: Abre la pantalla de enfermedades
+                        val intent = Intent(this, EnfermedadesActivity::class.java)
+                        // Pasamos el ID 1 por ahora para las pruebas en MySQL
+                        intent.putExtra("ID_USUARIO", 1)
+                        startActivity(intent)
+                    },
+                    onIrAMedicamentos = {
+                        // Vista de medicamentos (pendiente)
+                    }
                 )
             }
         }
@@ -63,11 +73,10 @@ fun HomeScreen(
         HistorialItem("Paracetamol", "Jueves, 19 de enero", true)
     )
 
-    // Contenedor pantalla de home
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5))) {
         Column(modifier = Modifier.fillMaxSize()) {
-            
-            //Muestra saludo y degradado azul
+
+            // Encabezado con saludo
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -88,7 +97,6 @@ fun HomeScreen(
                         Text(text = "¡Hola, $nombreUsuario!", fontSize = 29.sp, fontWeight = FontWeight.Bold, color = Color.White)
                         Text(text = "Tu Salud, Primero.", fontSize = 18.sp, color = Color.White.copy(alpha = 0.9f))
                     }
-                    //perfil falta
                     IconButton(onClick = { /* Acción de perfil */ }) {
                         Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null, tint = Color.White, modifier = Modifier.size(40.dp))
                     }
@@ -97,9 +105,8 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             Column(modifier = Modifier.padding(horizontal = 24.dp).weight(1f)) {
-                
+
                 // TARJETA PRÓXIMAS DOSIS
                 Card(
                     shape = RoundedCornerShape(20.dp),
@@ -107,7 +114,6 @@ fun HomeScreen(
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Column {
-                        // Título
                         Box(modifier = Modifier.fillMaxWidth().background(Color(0xFFE3F2FD), shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)).padding(12.dp)) {
                             Text(text = "Próximas dosis", fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = azul)
                         }
@@ -121,7 +127,6 @@ fun HomeScreen(
                                 Text(text = "500mg", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = azul)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Botón posponer
                             Button(
                                 onClick = { },
                                 modifier = Modifier.fillMaxWidth().height(45.dp),
@@ -141,7 +146,6 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 LazyColumn(modifier = Modifier.weight(1f)) {
                     items(historial) { item ->
-                        // Tarjeta individual para cada registro
                         Card(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                             shape = RoundedCornerShape(16.dp),
@@ -149,7 +153,6 @@ fun HomeScreen(
                             colors = CardDefaults.cardColors(containerColor = Color.White)
                         ) {
                             Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                                // Icono de estado
                                 Icon(
                                     painter = if (item.completado) painterResource(id = R.drawable.exitoso) else painterResource(id = R.drawable.no_exitoso),
                                     contentDescription = null,
@@ -166,7 +169,8 @@ fun HomeScreen(
                     }
                 }
             }
-            //Navegación entre las vistas inferior
+
+            // Barra de Navegación Inferior
             NavigationBar(
                 containerColor = Color.White,
                 tonalElevation = 0.dp
@@ -179,7 +183,6 @@ fun HomeScreen(
                     indicatorColor = Color.White
                 )
 
-                // Botón de Inicio
                 NavigationBarItem(
                     selected = true,
                     onClick = { },
@@ -187,7 +190,6 @@ fun HomeScreen(
                     label = { Text("Inicio", fontWeight = FontWeight.Bold) },
                     colors = itemColors
                 )
-                // Botón de Enfermedades
                 NavigationBarItem(
                     selected = false,
                     onClick = onIrAEnfermedades,
@@ -195,7 +197,6 @@ fun HomeScreen(
                     label = { Text("Enfermedades", fontWeight = FontWeight.Bold) },
                     colors = itemColors
                 )
-                // Botón de Medicamentos
                 NavigationBarItem(
                     selected = false,
                     onClick = onIrAMedicamentos,
@@ -206,17 +207,15 @@ fun HomeScreen(
             }
         }
 
-        // MENÚ
+        // MENÚ FLOTANTE
         AnimatedVisibility(visible = menuExpandido, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 90.dp)) {
             Card(shape = RoundedCornerShape(20.dp), elevation = CardDefaults.cardElevation(8.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
                 Column(modifier = Modifier.width(220.dp)) {
-                    // agregar enfermedad
                     Row(modifier = Modifier.fillMaxWidth().clickable { onIrAEnfermedades(); menuExpandido = false }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(painter = painterResource(id = R.drawable.emfermedad), contentDescription = null, modifier = Modifier.size(20.dp), tint = Color.Unspecified)
                         Spacer(modifier = Modifier.width(12.dp)); Text(text = "Agregar Enfermedad", fontSize = 15.sp, fontWeight = FontWeight.Medium)
                     }
                     HorizontalDivider(color = Color(0xFFE0E0E0))
-                    // agregar medicamento
                     Row(modifier = Modifier.fillMaxWidth().clickable { onIrAMedicamentos(); menuExpandido = false }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(painter = painterResource(id = R.drawable.medicamento), contentDescription = null, modifier = Modifier.size(20.dp), tint = Color.Unspecified)
                         Spacer(modifier = Modifier.width(12.dp)); Text(text = "Agregar Medicamento", fontSize = 15.sp, fontWeight = FontWeight.Medium)
@@ -224,8 +223,7 @@ fun HomeScreen(
                 }
             }
         }
-        
-        // Boton Abre/Cierra el menú
+
         FloatingActionButton(
             onClick = { menuExpandido = !menuExpandido },
             containerColor = azul,

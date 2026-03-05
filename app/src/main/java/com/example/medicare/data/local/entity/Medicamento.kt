@@ -11,7 +11,7 @@ import androidx.room.ColumnInfo
         ForeignKey(
             entity = Usuario::class,
             parentColumns = ["idUsuario"],
-            childColumns = ["idUsuarioFk"],
+            childColumns = ["id_usuario_fk"], // <--- ¡AQUÍ ESTÁ EL CAMBIO!
             onDelete = ForeignKey.CASCADE
         )
     ]
